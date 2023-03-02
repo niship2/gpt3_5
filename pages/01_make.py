@@ -17,7 +17,7 @@ def get_compilation(txt, title="", abst="", claims="", desc="", input_type="titl
             ]
         )
 
-    return response.choices[0].content
+    return response.choices[0].message.content
 
 
 if check_password():
