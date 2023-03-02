@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 from streamlit_app import check_password
 
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+
 if check_password():
     st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layout="wide")
 
@@ -11,6 +13,19 @@ if check_password():
             data = f.read()
 
     pd.options.display.precision = 1
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Who won the world series in 2020?"},
+            {"role": "assistant",
+             "content": "The Los Angeles Dodgers won the World Series in 2020."},
+            {"role": "user", "content": "Where was it played?"}
+        ]
+    )
+
+    st.write(response)
 
     tite = ""
     abst = ""
