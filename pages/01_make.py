@@ -59,7 +59,7 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
                         "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。"},
                     {"role": "system", "content": claims},
                     {"role": "user",
-                        "content": "特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。"},
+                        "content": "特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。文章は「である。」「であった。」などの語尾で作成して下さい。"},
                 ]
             )
             return response.choices[0].message.content
@@ -81,22 +81,26 @@ if check_password():
     title = get_completion(txt, title="", abst="",
                            claims="", desc="", input_type="title")
 
-    st.write(title)
+    with st.expander("発明の名称"):
+        st.write(title)
 
     abst = get_completion(txt, title=title, abst="",
                           claims="", desc="", input_type="abst")
 
-    st.write(abst)
+    with st.expander("要約"):
+        st.write(abst)
 
     claims = get_completion(txt, title=title, abst=abst,
                             claims="", desc="", input_type="claims")
 
-    st.write(claims)
+    with st.expander("特許請求の範囲"):
+        st.write(claims)
 
     desc = get_completion(txt, title=title, abst=abst,
                           claims=claims, desc="", input_type="desc")
 
-    st.write(desc)
+    with st.expander("詳細な説明"):
+        st.write(desc)
 
     st.session_state['title'] = title
     st.session_state['abst'] = abst
