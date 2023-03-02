@@ -67,7 +67,7 @@ if check_password():
 
     st.write(abst)
 
-    claims = get_completion(txt, title=title, abst="",
+    claims = get_completion(txt, title=title, abst=abst,
                             claims="", desc="", input_type="claims")
 
     st.write(claims)
