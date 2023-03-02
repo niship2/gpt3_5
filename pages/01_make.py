@@ -40,7 +40,9 @@ def get_compilation(txt, title="", abst="", claims="", desc="", input_type="titl
                     {"role": "system", "content": title},
                     {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
                     {"role": "system", "content": abst},
-                    {"role": "user", "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しをつけて下さい。文章は「～と、」「～と、」「～を備え、」という形で構成を列挙した上で、最後に「～を特徴とする～」という１文章で作成して下さい。"},
+                    {"role": "user",
+                        "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。"},
+                    # 文章は「～と、」「～と、」「～を備え、」という形で構成を列挙した上で、最後に「～を特徴とする～」という１文章で作成して下さい。
                 ]
             )
             return response  # .choices[0].message.content
