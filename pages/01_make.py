@@ -17,6 +17,8 @@ def get_compilation(txt, title="", abst="", claims="", desc="", input_type="titl
                     {"role": "user", "content": "以下の文章に特許文章らしいタイトルを付けてください。" + txt},
                 ]
             )
+            return response.choices[0].message.content
+
         if input_type == "abst":
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -27,6 +29,7 @@ def get_compilation(txt, title="", abst="", claims="", desc="", input_type="titl
                     {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
                 ]
             )
+            return response.choices[0].message.content
 
         if input_type == "clams":
             response = openai.ChatCompletion.create(
@@ -41,6 +44,7 @@ def get_compilation(txt, title="", abst="", claims="", desc="", input_type="titl
                 ]
             )
             return response.choices[0].message.content
+
     except Exception as e:
         return "error!" + st.write(e)
 
