@@ -27,6 +27,19 @@ def get_compilation(txt, title="", abst="", claims="", desc="", input_type="titl
             ]
         )
 
+    if input_type == "clams":
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "あなたは特許文章を作成する人です。"},
+                {"role": "user", "content": "以下の文章に特許文章らしいタイトルを付けてください。" + txt},
+                {"role": "system", "content": title},
+                {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
+                {"role": "system", "content": abst},
+                {"role": "user", "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しをつけて下さい。文章は「～と、」「～と、」「～を備え、」という形で構成を列挙した上で、最後に「～を特徴とする～」という１文章で作成して下さい。"},
+            ]
+        )
+
     return response.choices[0].message.content
 
 
@@ -49,7 +62,11 @@ if check_password():
 
     st.write(abst)
 
-    claims = ""
+    claims = get_compilation(txt, title=title, abst="",
+                             claims="", desc="", input_type="claims")
+
+    st.write(claims)
+
     desc = ""
 
     st.session_state['title'] = title
