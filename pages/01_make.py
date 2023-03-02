@@ -45,7 +45,7 @@ def get_compilation(txt, title="", abst="", claims="", desc="", input_type="titl
                     # 文章は「～と、」「～と、」「～を備え、」という形で構成を列挙した上で、最後に「～を特徴とする～」という１文章で作成して下さい。
                 ]
             )
-            return response  # .choices[0].message.content
+            return response.choices[0].message.content
 
     except Exception as e:
         return "error!" + st.write(e)
