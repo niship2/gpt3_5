@@ -8,7 +8,7 @@ st.set_page_config(
 
 def check_password():
     """Returns `True` if the user had the correct password."""
-    st.markdown("パスワードはpasswordです")
+    st.sidebar.markdown("パスワードはpasswordです")
 
     def password_entered():
         """Checks whether a password entered by the user is correct."""
