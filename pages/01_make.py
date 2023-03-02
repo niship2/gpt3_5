@@ -7,7 +7,7 @@ import openai
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 if check_password():
-    st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layout="wide")
+    #st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layout="wide")
 
     def file_downloader(filename, file_label='File'):
         with open(filename, 'rb') as f:
@@ -28,7 +28,7 @@ if check_password():
 
     st.write(response)
 
-    tite = ""
+    title = ""
     abst = ""
     claims = ""
     desc = ""

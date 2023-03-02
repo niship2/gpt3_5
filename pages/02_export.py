@@ -6,7 +6,7 @@ from streamlit_app import check_password
 if check_password():
     pd.options.display.precision = 1
 
-    st.set_page_config(page_title="Report", page_icon="🌍", layout="wide")
+    #st.set_page_config(page_title="Report", page_icon="🌍", layout="wide")
 
     def file_downloader(filename, file_label='File'):
         with open(filename, 'rb') as f:
