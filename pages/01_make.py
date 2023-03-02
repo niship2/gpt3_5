@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from streamlit_app import check_password
+import openai
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
