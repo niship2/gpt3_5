@@ -25,7 +25,7 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
                 messages=[
                     {"role": "system", "content": "あなたは特許文章を作成する人です。"},
                     {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
-                    {"role": "system", "content": title},
+                    {"role": "assistant", "content": title},
                     {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
                 ]
             )
@@ -37,9 +37,9 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
                 messages=[
                     {"role": "system", "content": "あなたは特許文章を作成する人です。"},
                     {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
-                    {"role": "system", "content": title},
+                    {"role": "assistant", "content": title},
                     {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
-                    {"role": "system", "content": abst},
+                    {"role": "assistant", "content": abst},
                     {"role": "user",
                         "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。"},
                 ]
@@ -52,12 +52,12 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
                 messages=[
                     {"role": "system", "content": "あなたは特許文章を作成する人です。"},
                     {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
-                    {"role": "system", "content": title},
+                    {"role": "assistant", "content": title},
                     {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
-                    {"role": "system", "content": abst},
+                    {"role": "assistant", "content": abst},
                     {"role": "user",
                         "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。"},
-                    {"role": "system", "content": claims},
+                    {"role": "assistant", "content": claims},
                     {"role": "user",
                         "content": "特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。文章は「である。」「であった。」などの語尾で作成して下さい。"},
                 ]
@@ -101,6 +101,9 @@ if check_password():
 
     with st.expander("詳細な説明"):
         st.write(desc)
+
+    with st.expander("図面"):
+        st.write("工事中")
 
     st.session_state['title'] = title
     st.session_state['abst'] = abst
