@@ -105,7 +105,7 @@ if check_password():
     img_response = openai.Image.create(
         prompt=claims.replace("【請求項１】", ""),
         n=1,
-        size="600x800"
+        size="512x512"
     )
     image_url = img_response['data'][0]['url']
 

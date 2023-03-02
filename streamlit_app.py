@@ -38,4 +38,4 @@ def check_password():
 if check_password():
     st.write("# GPT3.5による明細書生成の夢")
     st.write("## サイドバーのmakeを押して開始してください。 👋")
-    st.sidebar.success("パスワードはpasswordです")
+    st.sidebar("パスワードはpasswordです")
