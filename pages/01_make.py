@@ -7,7 +7,7 @@ import openai
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 
-def get_compilation(txt, title="", abst="", claims="", desc="", input_type="title"):
+def get_completion(txt, title="", abst="", claims="", desc="", input_type="title"):
     try:
         if input_type == "title":
             response = openai.ChatCompletion.create(
@@ -38,8 +38,8 @@ def get_compilation(txt, title="", abst="", claims="", desc="", input_type="titl
                     {"role": "system", "content": "あなたは特許文章を作成する人です。"},
                     {"role": "user", "content": "以下の文章に特許文章らしいタイトルを付けてください。" + txt},
                     {"role": "system", "content": title},
-                    {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
-                    {"role": "system", "content": abst},
+                    #{"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
+                    #{"role": "system", "content": abst},
                     {"role": "user",
                         "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。"},
                     # 文章は「～と、」「～と、」「～を備え、」という形で構成を列挙した上で、最後に「～を特徴とする～」という１文章で作成して下さい。
@@ -59,17 +59,17 @@ if check_password():
         【解決手段】平板形状のカソード電極１の一端に底部が平坦な椀形状部１２を形成し、前記椀形状部１２の内部にダイオード素子３をはんだ付けし、前記ダイオード素子３の上面に、平板形状のアノード電極２の一端２１をはんだ付けし、前記椀形状部の内部を絶縁樹脂で充填した。
         ''')
 
-    title = get_compilation(txt, title="", abst="",
-                            claims="", desc="", input_type="title")
+    title = get_completion(txt, title="", abst="",
+                           claims="", desc="", input_type="title")
     st.write(title)
 
-    abst = get_compilation(txt, title=title, abst="",
-                           claims="", desc="", input_type="abst")
+    abst = get_completion(txt, title=title, abst="",
+                          claims="", desc="", input_type="abst")
 
     st.write(abst)
 
-    claims = get_compilation(txt, title=title, abst=abst,
-                             claims="", desc="", input_type="claims")
+    claims = get_completion(txt, title=title, abst=abst,
+                            claims="", desc="", input_type="claims")
 
     st.write(claims)
 
