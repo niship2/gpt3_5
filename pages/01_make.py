@@ -102,8 +102,15 @@ if check_password():
     with st.expander("詳細な説明"):
         st.write(desc)
 
+    img_response = openai.Image.create(
+        prompt=claims.replace("【請求項１】", ""),
+        n=1,
+        size="600x800"
+    )
+    image_url = img_response['data'][0]['url']
+
     with st.expander("図面"):
-        st.write("工事中")
+        st.image(image_url)
 
     st.session_state['title'] = title
     st.session_state['abst'] = abst

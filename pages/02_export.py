@@ -22,3 +22,4 @@ if check_password():
     st.write(abst)
     st.write(claims)
     st.write(desc)
+    st.write("庁提出に便利なようにしたい。")

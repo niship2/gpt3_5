@@ -8,7 +8,6 @@ st.set_page_config(
 
 def check_password():
     """Returns `True` if the user had the correct password."""
-    st.sidebar.write("パスワードはpasswordです")
 
     def password_entered():
         """Checks whether a password entered by the user is correct."""
@@ -37,5 +36,6 @@ def check_password():
 
 
 if check_password():
-    st.write("# サイドバーのmakeを押して開始してください。 👋")
-    #st.sidebar.success("Select a menu above.")
+    st.write("# GPT3.5による明細書生成の夢")
+    st.write("## サイドバーのmakeを押して開始してください。 👋")
+    st.sidebar.success("パスワードはpasswordです")
