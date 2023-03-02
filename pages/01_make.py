@@ -14,7 +14,7 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": "あなたは特許文章を作成する人です。"},
-                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを付けてください。" + txt},
+                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
                 ]
             )
             return response.choices[0].message.content
@@ -24,7 +24,7 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": "あなたは特許文章を作成する人です。"},
-                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを付けてください。" + txt},
+                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
                     {"role": "system", "content": title},
                     {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
                 ]
@@ -36,12 +36,30 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": "あなたは特許文章を作成する人です。"},
-                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを付けてください。" + txt},
+                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
                     {"role": "system", "content": title},
                     {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
                     {"role": "system", "content": abst},
                     {"role": "user",
                         "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。"},
+                ]
+            )
+            return response.choices[0].message.content
+
+        if input_type == "desc":
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "あなたは特許文章を作成する人です。"},
+                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
+                    {"role": "system", "content": title},
+                    {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
+                    {"role": "system", "content": abst},
+                    {"role": "user",
+                        "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。"},
+                    {"role": "system", "content": claims},
+                    {"role": "user",
+                        "content": "特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【発明を実施するための形態】という見出しをこの順番で加えてください。「である。」「であった。」などの語尾で作成して下さい。"},
                 ]
             )
             return response.choices[0].message.content
@@ -58,8 +76,11 @@ if check_password():
         【解決手段】平板形状のカソード電極１の一端に底部が平坦な椀形状部１２を形成し、前記椀形状部１２の内部にダイオード素子３をはんだ付けし、前記ダイオード素子３の上面に、平板形状のアノード電極２の一端２１をはんだ付けし、前記椀形状部の内部を絶縁樹脂で充填した。
         ''')
 
+    st.markdown("---")
+
     title = get_completion(txt, title="", abst="",
                            claims="", desc="", input_type="title")
+
     st.write(title)
 
     abst = get_completion(txt, title=title, abst="",
@@ -72,7 +93,10 @@ if check_password():
 
     st.write(claims)
 
-    desc = ""
+    desc = get_completion(txt, title=title, abst=abst,
+                          claims=claims, desc="", input_type="desc")
+
+    st.write(desc)
 
     st.session_state['title'] = title
     st.session_state['abst'] = abst
