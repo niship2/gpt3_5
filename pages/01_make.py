@@ -46,8 +46,8 @@ if check_password():
     title_inst_col, title_gen_col = st.columns(2)
 
     # with st.expander("発明の名称"):
+    st.write("発明の名称")
     with st.container():
-        st.write("発明の名称")
         with title_inst_col:
             instruction_title = st.text_area(
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
@@ -61,11 +61,12 @@ if check_password():
             st.write(title)
 
     # abst###############################################3
+    st.markdown("---")
     abst_inst_col, abst_gen_col = st.columns(2)
 
     # with st.expander("要約"):
+    st.write("要約")
     with st.container():
-        st.write("要約")
         with abst_inst_col:
             instruction_abst = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
@@ -77,10 +78,11 @@ if check_password():
             st.write(abst)
 
     # claims###############################################3
+    st.markdown("---")
     claims_inst_col, claims_gen_col = st.columns(2)
 
+    st.write("請求項")
     with st.container():
-        st.write("請求項")
         with claims_inst_col:
             instruction_claims = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。")
@@ -91,21 +93,24 @@ if check_password():
             st.write(claims)
 
     # desc###############################################3
+    st.markdown("---")
     desc_inst_col, desc_gen_col = st.columns(2)
+    st.write("明細書")
     with st.container():
-        st.write("明細書")
+
         with desc_inst_col:
             pass
         with desc_gen_col:
             desc = get_completion(txt, title=title, abst=abst,
                                   claims=claims, desc="", input_type="desc")
-        st.write(desc)
+            st.write(desc)
 
     # img###############################################3
+    st.markdown("---")
     img_inst_col, img_gen_col = st.columns(2)
+    st.write("図面")
 
     with st.container():
-        st.write("図面")
         with img_inst_col:
             instruction_img = st.text_area(
                 '図面生成指示文を入力してください', value=abst, placeholder="工事中")
