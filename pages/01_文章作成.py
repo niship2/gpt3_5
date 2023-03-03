@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from streamlit_app import check_password
 import openai
-from gen_sentence import get_completion_title, get_completion_abst, get_completion_claims
+from gen_sentence import get_completion_title, get_completion_abst, get_completion_claims, get_completion_desc
 
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
@@ -102,11 +102,16 @@ if check_password():
 
     with st.container():
         with desc_inst_col:
-            pass
+            instruction_desc = st.text_area(
+                '文章生成指示文を入力してください', value="特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。", placeholder="特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。")
         with desc_gen_col:
             st.write("明細書")
-            desc = get_completion(txt, title=title, abst=abst,
-                                  claims=claims, desc="", input_type="desc")
+            if desc == "":
+                desc = get_completion_desc(txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst,
+                                           instruction_claims=instruction_claims, claims=claims, instruction_desc=instruction_desc)
+            else:
+                desc = st.session_state['desc']
+
             st.write(desc)
 
     # img###############################################3
