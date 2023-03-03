@@ -38,6 +38,6 @@ def check_password():
 st.sidebar.write("パスワードはpasswordです")
 if check_password():
     st.write("# GPT3.5による特許明細書生成(の夢)")
-    st.write("## サイドバーのmakeを押して開始してください。 👋")
+    st.write("## サイドバーの文章生成を押して開始してください。 👋")
     st.markdown(
         "#### 注意：[ChatGPTの利用は「公開」にあたるのか？](https://openlegalcommunity.com/chatgpt-public-disclosure/)に記載のとおり、アイデアをサーバに送った時点で、そのアイデアが公開とみなされる可能性がある、とのことなので、もし使う場合利用は試しだけにしてください。")

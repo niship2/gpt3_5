@@ -29,30 +29,6 @@ except:
     desc = ""
 
 
-def get_completion(txt, title="", abst="", claims="", desc="", input_type="title"):
-    try:
-        if input_type == "desc":
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "あなたは特許文章を作成する人です。"},
-                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
-                    {"role": "assistant", "content": title},
-                    {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
-                    {"role": "assistant", "content": abst},
-                    {"role": "user",
-                        "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。"},
-                    {"role": "assistant", "content": claims},
-                    {"role": "user",
-                        "content": "特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。"},
-                ]
-            )
-            return response.choices[0].message.content
-
-    except Exception as e:
-        return "error!" + st.write(e)
-
-
 if check_password():
     pd.options.display.precision = 1
 
@@ -82,10 +58,10 @@ if check_password():
     with st.container():
         with abst_inst_col:
             instruction_abst = st.text_area(
-                '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
-            if st.button("要約作成！"):
+                '文章生成指示文を入力してください', value="特許文章らしい要約として修正してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
+            if st.button("要約修正！"):
                 abst = get_completion_abst(
-                    txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
+                    txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst, abst=abst)
             else:
                 abst = st.session_state['abst']
         with abst_gen_col:
@@ -98,14 +74,15 @@ if check_password():
     with st.container():
         with claims_inst_col:
             instruction_claims = st.text_area(
-                '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。")
+                '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲として修正してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。")
 
-        with claims_gen_col:
-            if claims == "":
+            if st.button("請求項修正！"):
                 claims = get_completion_claims(
-                    txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
+                    txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims, claims=claims)
             else:
                 claims = st.session_state['claims']
+
+        with claims_gen_col:
             st.text_area("請求項", value=claims)
 
     # desc###############################################3
@@ -115,14 +92,13 @@ if check_password():
     with st.container():
         with desc_inst_col:
             instruction_desc = st.text_area(
-                '文章生成指示文を入力してください', value="特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。", placeholder="特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。")
-        with desc_gen_col:
-            if desc == "":
+                '文章生成指示文を入力してください', value="特許文章らしい明細書の文章として修正してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。", placeholder="特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。")
+            if st.button("明細書修正！"):
                 desc = get_completion_desc(txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst,
                                            instruction_claims=instruction_claims, claims=claims, instruction_desc=instruction_desc)
             else:
                 desc = st.session_state['desc']
-
+        with desc_gen_col:
             st.text_area("明細書", value=desc)
 
     # img###############################################3

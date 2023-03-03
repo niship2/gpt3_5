@@ -19,7 +19,7 @@ def get_completion_title(txt, instruction_title):
         return "error!" + st.write(e)
 
 
-def get_completion_abst(txt, title, instruction_title, instruction_abst):
+def get_completion_abst(txt, title, instruction_title, instruction_abst, abst):
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -27,7 +27,7 @@ def get_completion_abst(txt, title, instruction_title, instruction_abst):
                 {"role": "system", "content": "あなたは特許文章を作成する人です。"},
                 {"role": "user", "content": instruction_title + txt},
                 {"role": "assistant", "content": title},
-                {"role": "user", "content": instruction_abst},
+                {"role": "user", "content": instruction_abst + abst},
             ]
         )
         return response.choices[0].message.content
@@ -35,7 +35,7 @@ def get_completion_abst(txt, title, instruction_title, instruction_abst):
         return "error!" + st.write(e)
 
 
-def get_completion_claims(txt, title, abst, instruction_title, instruction_abst, instruction_claims):
+def get_completion_claims(txt, title, abst, instruction_title, instruction_abst, instruction_claims, claims):
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -45,7 +45,7 @@ def get_completion_claims(txt, title, abst, instruction_title, instruction_abst,
                 {"role": "assistant", "content": title},
                 {"role": "user", "content": instruction_abst},
                 {"role": "assistant", "content": abst},
-                {"role": "user", "content": instruction_claims}
+                {"role": "user", "content": instruction_claims + claims}
             ]
         )
         return response.choices[0].message.content
