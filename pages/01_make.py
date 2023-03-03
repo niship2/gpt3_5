@@ -3,49 +3,15 @@ import pandas as pd
 import numpy as np
 from streamlit_app import check_password
 import openai
+from gen_sentence import get_completion_title
+from gen_sentence import get_completion_abst
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layout="wide")
 
 
-def get_completion_title(txt, instruction="以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。"):
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "あなたは特許文章を作成する人です。"},
-                {"role": "user", "content": instruction + txt},
-            ]
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        return "error!" + st.write(e)
-
-
 def get_completion(txt, title="", abst="", claims="", desc="", input_type="title"):
     try:
-        if input_type == "title":
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "あなたは特許文章を作成する人です。"},
-                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
-                ]
-            )
-            return response.choices[0].message.content
-
-        if input_type == "abst":
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "あなたは特許文章を作成する人です。"},
-                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
-                    {"role": "assistant", "content": title},
-                    {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
-                ]
-            )
-            return response.choices[0].message.content
-
         if input_type == "claims":
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -92,12 +58,13 @@ if check_password():
 
     st.markdown("---")
 
+    # title###############################################3
     title_inst_col, title_gen_col = st.columns(2)
 
     with st.expander("発明の名称"):
         with title_inst_col:
             instruction_title = st.text_area(
-                '文章生成指示文章を入力してください', value="", placeholder="以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。")
+                '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
 
     # title = get_completion(txt, title="", abst="",
     #                       claims="", desc="", input_type="title")
@@ -106,11 +73,19 @@ if check_password():
 
             st.write(title)
 
-    abst = get_completion(txt, title=title, abst="",
-                          claims="", desc="", input_type="abst")
+    # abst###############################################3
+    abst_inst_col, abst_gen_col = st.columns(2)
 
     with st.expander("要約"):
-        st.write(abst)
+        with abst_inst_col:
+            instruction_abst = st.text_area(
+                '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
+
+        with abst_gen_col:
+            abst = get_completion_abst(
+                txt, title, instruction_title, instruction_abst)
+
+            st.write(abst)
 
     claims = get_completion(txt, title=title, abst=abst,
                             claims="", desc="", input_type="claims")
@@ -135,6 +110,7 @@ if check_password():
         st.image(image_url)
 
     st.session_state['title'] = title
+    st.session_state['instruction_title'] = instruction_title
     st.session_state['abst'] = abst
     st.session_state['claims'] = claims
     st.session_state['desc'] = desc
