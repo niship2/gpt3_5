@@ -64,7 +64,7 @@ if check_password():
 
         desc_out = ""
 
-        for i in range(0, desc_temp_list-1):
+        for i in range(0, len(desc_temp_list)-1):
             desc_out += "【" + str(i+1).zfill(4) + "】" + \
                 desc_temp_list[i] + "。\r\n"
         st.write(desc_out)
