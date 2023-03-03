@@ -27,18 +27,18 @@ if check_password():
 
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["願書", "要約", "請求項", "明細書", "図面"])
 
-with tab1:
-    st.header("願書")
-    st.image("https://static.streamlit.io/examples/cat.jpg", width=200)
+    with tab1:
+        st.header("願書")
+        st.image("https://static.streamlit.io/examples/cat.jpg", width=200)
 
-with tab2:
-    st.header("要約")
-    st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
+    with tab2:
+        st.header("要約")
+        st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
 
-with tab3:
-    st.header("請求項")
-    st.image("https://static.streamlit.io/examples/owl.jpg", width=200)
-with tab4:
-    st.header("明細書")
-with tab5:
-    st.header("図面")
+    with tab3:
+        st.header("請求項")
+        st.image("https://static.streamlit.io/examples/owl.jpg", width=200)
+    with tab4:
+        st.header("明細書")
+    with tab5:
+        st.header("図面")

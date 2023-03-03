@@ -69,7 +69,8 @@ if check_password():
     # title = get_completion(txt, title="", abst="",
     #                       claims="", desc="", input_type="title")
         with title_gen_col:
-            title = get_completion_title(txt, instruction=instruction_title)
+            title = get_completion_title(
+                txt, instruction_title=instruction_title)
 
             st.write(title)
 
