@@ -53,7 +53,7 @@ if check_password():
         with title_inst_col:
             instruction_title = st.text_area(
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
-            if st.button('生成'):
+            if st.button('生成', key="title"):
                 title = get_completion_title(
                     txt, instruction_title=instruction_title)
 
@@ -70,7 +70,7 @@ if check_password():
             instruction_abst = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
 
-            if st.button('生成'):
+            if st.button('生成', key="abst"):
                 abst = get_completion_abst(
                     txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
 
@@ -86,7 +86,7 @@ if check_password():
         with claims_inst_col:
             instruction_claims = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。")
-            if st.button('生成'):
+            if st.button('生成', key="claims"):
                 claims = get_completion_claims(
                     txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
 
@@ -100,7 +100,7 @@ if check_password():
 
     with st.container():
         with desc_inst_col:
-            if st.button('生成'):
+            if st.button('生成', key="desc"):
                 desc = get_completion(txt, title=title, abst=abst,
                                       claims=claims, desc="", input_type="desc")
         with desc_gen_col:
@@ -115,12 +115,13 @@ if check_password():
             instruction_img = st.text_area(
                 '図面生成指示文を入力してください', value=abst, placeholder="工事中")
 
-            img_response = openai.Image.create(
-                prompt=instruction_img,
-                n=1,
-                size="256x256"
-            )
-            image_url = img_response['data'][0]['url']
+            if st.button('生成', key="img"):
+                img_response = openai.Image.create(
+                    prompt=instruction_img,
+                    n=1,
+                    size="256x256"
+                )
+                image_url = img_response['data'][0]['url']
         with img_gen_col:
             st.write("図面")
             st.image(image_url)
