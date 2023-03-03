@@ -7,6 +7,20 @@ import openai
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 
+def get_completion_title(txt, instruction="以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。"):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "あなたは特許文章を作成する人です。"},
+                {"role": "user", "content": instruction + txt},
+            ]
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return "error!" + st.write(e)
+
+
 def get_completion(txt, title="", abst="", claims="", desc="", input_type="title"):
     try:
         if input_type == "title":
@@ -78,8 +92,13 @@ if check_password():
 
     st.markdown("---")
 
-    title = get_completion(txt, title="", abst="",
-                           claims="", desc="", input_type="title")
+    instruction_title = st.text_area(
+        '文章指示文章を入力してください', value="", placeholder="以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。")
+
+    # title = get_completion(txt, title="", abst="",
+    #                       claims="", desc="", input_type="title")
+
+    title = get_completion_title(txt, instruction=instruction_title)
 
     with st.expander("発明の名称"):
         st.write(title)
