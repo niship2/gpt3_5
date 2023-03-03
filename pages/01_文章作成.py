@@ -11,11 +11,22 @@ st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layo
 
 
 # 初期値
-title = st.session_state.title
-instruction_title = st.session_state.instruction_title
-abst = st.session_state.abst
-claims = st.session_state.claims
-desc = st.session_state.desc
+try:
+    title = st.session_state.title
+except:
+    title = ""
+try:
+    abst = st.session_state.abst
+except:
+    abst = ""
+try:
+    claims = st.session_state.claims
+except:
+    claims = ""
+try:
+    desc = st.session_state.desc
+except:
+    desc = ""
 
 
 def get_completion(txt, title="", abst="", claims="", desc="", input_type="title"):
