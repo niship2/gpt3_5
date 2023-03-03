@@ -65,8 +65,8 @@ if check_password():
         desc_out = ""
 
         for i in range(0, len(desc_temp_list)-1):
-            desc_out += "【" + str(i+1).zfill(4) + "】" + \
-                desc_temp_list[i] + "。\r\n"
+            desc_out += "\r\n【" + str(i+1).zfill(4) + "】" + \
+                desc_temp_list[i] + "。"
         st.write(desc_out)
     with tab5:
         st.header("図面")
