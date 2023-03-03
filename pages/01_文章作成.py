@@ -15,18 +15,22 @@ try:
     title = st.session_state.title
 except:
     title = ""
+    st.session_state['title'] = title
 try:
     abst = st.session_state.abst
 except:
     abst = ""
+    st.session_state['abst'] = abst
 try:
     claims = st.session_state.claims
 except:
     claims = ""
+    st.session_state['claims'] = claims
 try:
     desc = st.session_state.desc
 except:
     desc = ""
+    st.session_state['desc'] = desc
 
 
 if check_password():
