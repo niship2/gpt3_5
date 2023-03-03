@@ -44,17 +44,12 @@ if check_password():
 
     # title###############################################3
     title_inst_col, title_gen_col = st.columns(2)
-
-    # with st.expander("発明の名称"):
-    st.write("発明の名称")
     with st.container():
         with title_inst_col:
             instruction_title = st.text_area(
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
-
-    # title = get_completion(txt, title="", abst="",
-    #                       claims="", desc="", input_type="title")
         with title_gen_col:
+            st.write("発明の名称")
             title = get_completion_title(
                 txt, instruction_title=instruction_title)
 
@@ -64,14 +59,13 @@ if check_password():
     st.markdown("---")
     abst_inst_col, abst_gen_col = st.columns(2)
 
-    # with st.expander("要約"):
-    st.write("要約")
     with st.container():
         with abst_inst_col:
             instruction_abst = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
 
         with abst_gen_col:
+            st.write("要約")
             abst = get_completion_abst(
                 txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
 
@@ -81,26 +75,26 @@ if check_password():
     st.markdown("---")
     claims_inst_col, claims_gen_col = st.columns(2)
 
-    st.write("請求項")
     with st.container():
         with claims_inst_col:
             instruction_claims = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。")
 
         with claims_gen_col:
-            claims = get_completion_claims(txt, title=title, abst=abst,
-                                           instruction_claims=instruction_claims)
+            st.write("請求項")
+            claims = get_completion_claims(
+                txt, title=title, abst=abst, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
             st.write(claims)
 
     # desc###############################################3
     st.markdown("---")
     desc_inst_col, desc_gen_col = st.columns(2)
-    st.write("明細書")
-    with st.container():
 
+    with st.container():
         with desc_inst_col:
             pass
         with desc_gen_col:
+            st.write("明細書")
             desc = get_completion(txt, title=title, abst=abst,
                                   claims=claims, desc="", input_type="desc")
             st.write(desc)
