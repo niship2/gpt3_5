@@ -69,10 +69,12 @@ if check_password():
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
         with title_gen_col:
             st.write("発明の名称")
-            title = get_completion_title(
-                txt, instruction_title=instruction_title)
-
-            st.write(title)
+            if title == "":
+                title = get_completion_title(
+                    txt, instruction_title=instruction_title)
+            else:
+                title = st.session_state['title']
+            st.text_area(title)
 
     # abst###############################################3
     st.markdown("---")
@@ -84,10 +86,12 @@ if check_password():
                 '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
         with abst_gen_col:
             st.write("要約")
-            abst = get_completion_abst(
-                txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
-
-            st.write(abst)
+            if abst == "":
+                abst = get_completion_abst(
+                    txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
+            else:
+                abst = st.session_state['abst']
+            st.text_area(abst)
 
     # claims###############################################3
     st.markdown("---")
@@ -105,7 +109,7 @@ if check_password():
                     txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
             else:
                 claims = st.session_state['claims']
-            st.write(claims)
+            st.text_area(claims)
 
     # desc###############################################3
     st.markdown("---")
@@ -123,7 +127,7 @@ if check_password():
             else:
                 desc = st.session_state['desc']
 
-            st.write(desc)
+            st.text_area(desc)
 
     # img###############################################3
     st.markdown("---")
