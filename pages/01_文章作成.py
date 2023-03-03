@@ -68,8 +68,7 @@ if check_password():
             instruction_title = st.text_area(
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
         with title_gen_col:
-            st.write("発明の名称")
-            if title == "":
+            if st.button("作成！"):
                 title = get_completion_title(
                     txt, instruction_title=instruction_title)
             else:
@@ -85,7 +84,6 @@ if check_password():
             instruction_abst = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
         with abst_gen_col:
-            st.write("要約")
             if abst == "":
                 abst = get_completion_abst(
                     txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
@@ -103,7 +101,6 @@ if check_password():
                 '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。")
 
         with claims_gen_col:
-            st.write("請求項")
             if claims == "":
                 claims = get_completion_claims(
                     txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
@@ -120,7 +117,6 @@ if check_password():
             instruction_desc = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。", placeholder="特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。")
         with desc_gen_col:
-            st.write("明細書")
             if desc == "":
                 desc = get_completion_desc(txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst,
                                            instruction_claims=instruction_claims, claims=claims, instruction_desc=instruction_desc)
