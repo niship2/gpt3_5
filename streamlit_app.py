@@ -40,4 +40,4 @@ if check_password():
     st.write("# GPT3.5による特許明細書生成(の夢)")
     st.write("## サイドバーのmakeを押して開始してください。 👋")
     st.markdown(
-        "## <font color='red'>注意：[ChatGPTの利用は「公開」にあたるのか？](https://openlegalcommunity.com/chatgpt-public-disclosure/)に記載のとおり、アイデアをサーバに送った時点で、そのアイデアが公開とみなされる可能性がある、とのことなので、もし使う場合利用は試しだけにしてください。</font>")
+        "#### 注意：[ChatGPTの利用は「公開」にあたるのか？](https://openlegalcommunity.com/chatgpt-public-disclosure/)に記載のとおり、アイデアをサーバに送った時点で、そのアイデアが公開とみなされる可能性がある、とのことなので、もし使う場合利用は試しだけにしてください。")
