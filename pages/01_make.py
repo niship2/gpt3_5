@@ -5,6 +5,7 @@ from streamlit_app import check_password
 import openai
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
+st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layout="wide")
 
 
 def get_completion_title(txt, instruction="以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。"):
@@ -83,7 +84,6 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
 
 
 if check_password():
-    #st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layout="wide")
     pd.options.display.precision = 1
 
     txt = st.text_area('アイデアを入力してください。', '''【課題】半導体装置の薄型化と剥離強度の維持をした平板形状の半導体装置を提供する。
@@ -92,16 +92,19 @@ if check_password():
 
     st.markdown("---")
 
-    instruction_title = st.text_area(
-        '文章指示文章を入力してください', value="", placeholder="以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。")
+    title_inst_col, title_gen_col = st.columns(2)
+
+    with st.expander("発明の名称"):
+        with title_inst_col:
+            instruction_title = st.text_area(
+                '文章生成指示文章を入力してください', value="", placeholder="以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。")
 
     # title = get_completion(txt, title="", abst="",
     #                       claims="", desc="", input_type="title")
+        with title_gen_col:
+            title = get_completion_title(txt, instruction=instruction_title)
 
-    title = get_completion_title(txt, instruction=instruction_title)
-
-    with st.expander("発明の名称"):
-        st.write(title)
+            st.write(title)
 
     abst = get_completion(txt, title=title, abst="",
                           claims="", desc="", input_type="abst")
