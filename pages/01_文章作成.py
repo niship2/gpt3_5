@@ -111,14 +111,15 @@ if check_password():
     with st.container():
         with img_inst_col:
             instruction_img = st.text_area(
-                '図面生成指示文を入力してください', value=abst, placeholder="工事中")
+                '図面生成指示文を入力してください', value=title, placeholder="工事中")
 
-            img_response = openai.Image.create(
-                prompt=instruction_img,
-                n=1,
-                size="256x256"
-            )
-            image_url = img_response['data'][0]['url']
+            if st.button("図面生成"):
+                img_response = openai.Image.create(
+                    prompt=instruction_img,
+                    n=1,
+                    size="256x256"
+                )
+                image_url = img_response['data'][0]['url']
         with img_gen_col:
             st.write("図面")
             st.image(image_url)
