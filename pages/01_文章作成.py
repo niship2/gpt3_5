@@ -67,12 +67,12 @@ if check_password():
         with title_inst_col:
             instruction_title = st.text_area(
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
-        with title_gen_col:
-            if st.button("作成！"):
+            if st.button("名称作成！"):
                 title = get_completion_title(
                     txt, instruction_title=instruction_title)
             else:
                 title = st.session_state['title']
+        with title_gen_col:
             st.text_area("発明の名称", value=title)
 
     # abst###############################################3
@@ -83,12 +83,12 @@ if check_password():
         with abst_inst_col:
             instruction_abst = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
-        with abst_gen_col:
-            if abst == "":
+            if st.button("要約作成！"):
                 abst = get_completion_abst(
                     txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
             else:
                 abst = st.session_state['abst']
+        with abst_gen_col:
             st.text_area("要約", value=abst)
 
     # claims###############################################3
