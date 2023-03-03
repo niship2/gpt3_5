@@ -74,7 +74,7 @@ if check_password():
                     txt, instruction_title=instruction_title)
             else:
                 title = st.session_state['title']
-            st.text_area(title)
+            st.text_area("発明の名称", value=title)
 
     # abst###############################################3
     st.markdown("---")
@@ -91,7 +91,7 @@ if check_password():
                     txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
             else:
                 abst = st.session_state['abst']
-            st.text_area(abst)
+            st.text_area("要約", value=abst)
 
     # claims###############################################3
     st.markdown("---")
@@ -109,7 +109,7 @@ if check_password():
                     txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
             else:
                 claims = st.session_state['claims']
-            st.text_area(claims)
+            st.text_area("請求項", value=claims)
 
     # desc###############################################3
     st.markdown("---")
@@ -127,7 +127,7 @@ if check_password():
             else:
                 desc = st.session_state['desc']
 
-            st.text_area(desc)
+            st.text_area("明細書", value=desc)
 
     # img###############################################3
     st.markdown("---")

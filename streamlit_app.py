@@ -35,8 +35,8 @@ def check_password():
         return True
 
 
+st.sidebar.write("パスワードはpasswordです")
 if check_password():
-    st.sidebar.write("パスワードはpasswordです")
     st.write("# GPT3.5による特許明細書生成(の夢)")
     st.write("## サイドバーのmakeを押して開始してください。 👋")
     st.markdown(
