@@ -122,7 +122,10 @@ if check_password():
                 image_url = img_response['data'][0]['url']
         with img_gen_col:
             st.write("図面")
-            st.image(image_url)
+            try:
+                st.image(image_url)
+            except:
+                pass
 
     st.session_state['title'] = title
     st.session_state['instruction_title'] = instruction_title
