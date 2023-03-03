@@ -12,6 +12,12 @@ st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layo
 
 # 初期値
 try:
+    txt = st.session_state.txt
+except:
+    txt = "'半導体装置の薄型化と剥離強度の維持をした平板形状の半導体装置を提供する。平板形状のカソード電極の一端に底部が平坦な椀形状部を形成し、前記椀形状部の内部にダイオード素子をはんだ付けし、前記ダイオード素子の上面に、平板形状のアノード電極の一端をはんだ付けし、前記椀形状部の内部を絶縁樹脂で充填した。'"
+    st.session_state['txt'] = txt
+
+try:
     title = st.session_state.title
 except:
     title = ""
@@ -37,7 +43,7 @@ if check_password():
     pd.options.display.precision = 1
 
     txt = st.text_area(
-        'アイデアを入力してください。', '''半導体装置の薄型化と剥離強度の維持をした平板形状の半導体装置を提供する。平板形状のカソード電極の一端に底部が平坦な椀形状部を形成し、前記椀形状部の内部にダイオード素子をはんだ付けし、前記ダイオード素子の上面に、平板形状のアノード電極の一端をはんだ付けし、前記椀形状部の内部を絶縁樹脂で充填した。''')
+        'アイデアを入力してください。', txt)
 
     st.markdown("---")
 
@@ -127,6 +133,7 @@ if check_password():
             except:
                 pass
 
+    st.session_state['txt'] = txt
     st.session_state['title'] = title
     st.session_state['instruction_title'] = instruction_title
     st.session_state['abst'] = abst
