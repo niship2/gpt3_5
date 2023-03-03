@@ -37,11 +37,6 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
 if check_password():
     pd.options.display.precision = 1
 
-    title = ""
-    abst = ""
-    claimns = ""
-    desc = ""
-
     txt = st.text_area(
         'アイデアを入力してください。', '''半導体装置の薄型化と剥離強度の維持をした平板形状の半導体装置を提供する。平板形状のカソード電極の一端に底部が平坦な椀形状部を形成し、前記椀形状部の内部にダイオード素子をはんだ付けし、前記ダイオード素子の上面に、平板形状のアノード電極の一端をはんだ付けし、前記椀形状部の内部を絶縁樹脂で充填した。''')
 
@@ -53,12 +48,11 @@ if check_password():
         with title_inst_col:
             instruction_title = st.text_area(
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
-            if st.button('生成', key="title"):
-                title = get_completion_title(
-                    txt, instruction_title=instruction_title)
-
         with title_gen_col:
             st.write("発明の名称")
+            title = get_completion_title(
+                txt, instruction_title=instruction_title)
+
             st.write(title)
 
     # abst###############################################3
@@ -69,13 +63,11 @@ if check_password():
         with abst_inst_col:
             instruction_abst = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
-
-            if st.button('生成', key="abst"):
-                abst = get_completion_abst(
-                    txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
-
         with abst_gen_col:
             st.write("要約")
+            abst = get_completion_abst(
+                txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
+
             st.write(abst)
 
     # claims###############################################3
@@ -86,12 +78,11 @@ if check_password():
         with claims_inst_col:
             instruction_claims = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。")
-            if st.button('生成', key="claims"):
-                claims = get_completion_claims(
-                    txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
 
         with claims_gen_col:
             st.write("請求項")
+            claims = get_completion_claims(
+                txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
             st.write(claims)
 
     # desc###############################################3
@@ -100,11 +91,11 @@ if check_password():
 
     with st.container():
         with desc_inst_col:
-            if st.button('生成', key="desc"):
-                desc = get_completion(txt, title=title, abst=abst,
-                                      claims=claims, desc="", input_type="desc")
+            pass
         with desc_gen_col:
             st.write("明細書")
+            desc = get_completion(txt, title=title, abst=abst,
+                                  claims=claims, desc="", input_type="desc")
             st.write(desc)
 
     # img###############################################3
@@ -115,13 +106,12 @@ if check_password():
             instruction_img = st.text_area(
                 '図面生成指示文を入力してください', value=abst, placeholder="工事中")
 
-            if st.button('生成', key="img"):
-                img_response = openai.Image.create(
-                    prompt=instruction_img,
-                    n=1,
-                    size="256x256"
-                )
-                image_url = img_response['data'][0]['url']
+            img_response = openai.Image.create(
+                prompt=instruction_img,
+                n=1,
+                size="256x256"
+            )
+            image_url = img_response['data'][0]['url']
         with img_gen_col:
             st.write("図面")
             st.image(image_url)
