@@ -83,7 +83,7 @@ if check_password():
         with claims_gen_col:
             st.write("請求項")
             claims = get_completion_claims(
-                txt, title=title, abst=abst, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
+                txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
             st.write(claims)
 
     # desc###############################################3
