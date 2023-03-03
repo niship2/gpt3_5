@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 from streamlit_app import check_password
 import openai
-from gen_sentence import get_completion_title
-from gen_sentence import get_completion_abst
+from gen_sentence import get_completion_title, get_completion_abst, get_completion_claims
+
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layout="wide")
@@ -12,21 +12,6 @@ st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layo
 
 def get_completion(txt, title="", abst="", claims="", desc="", input_type="title"):
     try:
-        if input_type == "claims":
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "あなたは特許文章を作成する人です。"},
-                    {"role": "user", "content": "以下の文章に特許文章らしいタイトルを１０文字以内で作成してください。" + txt},
-                    {"role": "assistant", "content": title},
-                    {"role": "user", "content": "特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。"},
-                    {"role": "assistant", "content": abst},
-                    {"role": "user",
-                        "content": "特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。"},
-                ]
-            )
-            return response.choices[0].message.content
-
         if input_type == "desc":
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -52,16 +37,17 @@ def get_completion(txt, title="", abst="", claims="", desc="", input_type="title
 if check_password():
     pd.options.display.precision = 1
 
-    txt = st.text_area('アイデアを入力してください。', '''【課題】半導体装置の薄型化と剥離強度の維持をした平板形状の半導体装置を提供する。
-        【解決手段】平板形状のカソード電極１の一端に底部が平坦な椀形状部１２を形成し、前記椀形状部１２の内部にダイオード素子３をはんだ付けし、前記ダイオード素子３の上面に、平板形状のアノード電極２の一端２１をはんだ付けし、前記椀形状部の内部を絶縁樹脂で充填した。
-        ''')
+    txt = st.text_area(
+        'アイデアを入力してください。', '''半導体装置の薄型化と剥離強度の維持をした平板形状の半導体装置を提供する。平板形状のカソード電極の一端に底部が平坦な椀形状部を形成し、前記椀形状部の内部にダイオード素子をはんだ付けし、前記ダイオード素子の上面に、平板形状のアノード電極の一端をはんだ付けし、前記椀形状部の内部を絶縁樹脂で充填した。''')
 
     st.markdown("---")
 
     # title###############################################3
     title_inst_col, title_gen_col = st.columns(2)
 
-    with st.expander("発明の名称"):
+    # with st.expander("発明の名称"):
+    with st.container():
+        st.write("発明の名称")
         with title_inst_col:
             instruction_title = st.text_area(
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
@@ -77,38 +63,61 @@ if check_password():
     # abst###############################################3
     abst_inst_col, abst_gen_col = st.columns(2)
 
-    with st.expander("要約"):
+    # with st.expander("要約"):
+    with st.container():
+        st.write("要約")
         with abst_inst_col:
             instruction_abst = st.text_area(
                 '文章生成指示文を入力してください', value="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
 
         with abst_gen_col:
             abst = get_completion_abst(
-                txt, title, instruction_title, instruction_abst)
+                txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst)
 
             st.write(abst)
 
-    claims = get_completion(txt, title=title, abst=abst,
-                            claims="", desc="", input_type="claims")
+    # claims###############################################3
+    claims_inst_col, claims_gen_col = st.columns(2)
 
-    with st.expander("特許請求の範囲"):
-        st.write(claims)
+    with st.container():
+        st.write("請求項")
+        with claims_inst_col:
+            instruction_claims = st.text_area(
+                '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。")
 
-    desc = get_completion(txt, title=title, abst=abst,
-                          claims=claims, desc="", input_type="desc")
+        with claims_gen_col:
+            claims = get_completion_claims(txt, title=title, abst=abst,
+                                           instruction_claims=instruction_claims)
+            st.write(claims)
 
-    with st.expander("詳細な説明"):
+    # desc###############################################3
+    desc_inst_col, desc_gen_col = st.columns(2)
+    with st.container():
+        st.write("明細書")
+        with desc_inst_col:
+            pass
+        with desc_gen_col:
+            desc = get_completion(txt, title=title, abst=abst,
+                                  claims=claims, desc="", input_type="desc")
         st.write(desc)
 
-    img_response = openai.Image.create(
-        prompt=claims.replace("【請求項１】", ""),
-        n=1,
-        size="512x512"
-    )
-    image_url = img_response['data'][0]['url']
+    # img###############################################3
+    img_inst_col, img_gen_col = st.columns(2)
 
-    with st.expander("図面"):
-        st.image(image_url)
+    with st.container():
+        st.write("図面")
+        with img_inst_col:
+            instruction_img = st.text_area(
+                '図面生成指示文を入力してください', value=abst, placeholder="工事中")
+
+            img_response = openai.Image.create(
+                prompt=instruction_img,
+                n=1,
+                size="256x256"
+            )
+            image_url = img_response['data'][0]['url']
+        with img_gen_col:
+            st.image(image_url)
 
     st.session_state['title'] = title
     st.session_state['instruction_title'] = instruction_title
