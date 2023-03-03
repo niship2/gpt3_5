@@ -10,6 +10,14 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layout="wide")
 
 
+# 初期値
+title = st.session_state.title
+instruction_title = st.session_state.instruction_title
+abst = st.session_state.abst
+claims = st.session_state.claims
+desc = st.session_state.desc
+
+
 def get_completion(txt, title="", abst="", claims="", desc="", input_type="title"):
     try:
         if input_type == "desc":
@@ -81,8 +89,11 @@ if check_password():
 
         with claims_gen_col:
             st.write("請求項")
-            claims = get_completion_claims(
-                txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
+            if claims == "":
+                claims = get_completion_claims(
+                    txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims)
+            else:
+                claims = st.session_state['claims']
             st.write(claims)
 
     # desc###############################################3
