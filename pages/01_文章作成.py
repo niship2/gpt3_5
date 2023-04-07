@@ -5,10 +5,17 @@ from streamlit_app import check_password
 import openai
 from gen_sentence import get_completion_title, get_completion_abst, get_completion_claims, get_completion_desc
 
+openai.api_key = st.secrets["API-KEY"]
+openai.api_type = "azure"
+openai.api_base = st.secrets["OPENAI_API_BASE"]
+openai.api_version = "2023-03-15-preview"
 
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+
 st.set_page_config(page_title="明細書作成ページ", page_icon="🌍", layout="wide")
 
+option = st.sidebar.selectbox(
+    '生成モデル選択',
+    ('gpt-3.5', 'gpt-4'))
 
 # 初期値
 try:
@@ -55,7 +62,7 @@ if check_password():
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
             if st.button("名称作成！"):
                 title = get_completion_title(
-                    txt, instruction_title=instruction_title)
+                    txt, instruction_title=instruction_title, option="gpt-4")
             else:
                 title = st.session_state['title']
         with title_gen_col:
@@ -71,7 +78,7 @@ if check_password():
                 '文章生成指示文を入力してください', value="特許文章らしい要約として修正してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
             if st.button("要約修正！"):
                 abst = get_completion_abst(
-                    txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst, abst=abst)
+                    txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst, abst=abst, option="gpt-4")
             else:
                 abst = st.session_state['abst']
         with abst_gen_col:
@@ -84,11 +91,11 @@ if check_password():
     with st.container():
         with claims_inst_col:
             instruction_claims = st.text_area(
-                '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲として修正してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。文章はジェプソン形式で１文章で作成して下さい。")
+                '文章生成指示文を入力してください', value="特許文章らしい特許請求の範囲として修正してください。【請求項１】という見出しを加えて下さい。１文章で作成して下さい。", placeholder="特許文章らしい特許請求の範囲を作成してください。【請求項１】という見出しを加えて下さい。１文章で作成して下さい。")
 
             if st.button("請求項修正！"):
                 claims = get_completion_claims(
-                    txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims, claims=claims)
+                    txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims, claims=claims, option="gpt-4")
             else:
                 claims = st.session_state['claims']
 
@@ -105,7 +112,7 @@ if check_password():
                 '文章生成指示文を入力してください', value="特許文章らしい明細書の文章として修正してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。", placeholder="特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。")
             if st.button("明細書修正！"):
                 desc = get_completion_desc(txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst,
-                                           instruction_claims=instruction_claims, claims=claims, instruction_desc=instruction_desc)
+                                           instruction_claims=instruction_claims, claims=claims, instruction_desc=instruction_desc, option="gpt-4")
             else:
                 desc = st.session_state['desc']
         with desc_gen_col:
@@ -120,18 +127,20 @@ if check_password():
                 '図面生成指示文を入力してください', value=title, placeholder="工事中")
 
             if st.button("図面生成"):
-                img_response = openai.Image.create(
-                    prompt=instruction_img,
-                    n=1,
-                    size="256x256"
-                )
-                image_url = img_response['data'][0]['url']
-        with img_gen_col:
-            st.write("図面")
-            try:
-                st.image(image_url)
-            except:
                 pass
+                # img_response = openai.Image.create(
+                #    prompt=instruction_img,
+                #    n=1,
+                #    size="256x256"
+                # )
+                # image_url = img_response['data'][0]['url']
+        with img_gen_col:
+            pass
+            # st.write("図面")
+            # try:
+            #    st.image(image_url)
+            # except:
+            #    pass
 
     st.session_state['txt'] = txt
     st.session_state['title'] = title
@@ -139,6 +148,7 @@ if check_password():
     st.session_state['abst'] = abst
     st.session_state['claims'] = claims
     st.session_state['desc'] = desc
+    st.session_state['option'] = option
 
     st.experimental_set_query_params(
         # comp1=comp1,

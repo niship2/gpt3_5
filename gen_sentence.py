@@ -5,10 +5,22 @@ import numpy as np
 from streamlit_app import check_password
 
 
-def get_completion_title(txt, instruction_title):
+try:
+    option = st.session_state.option
+except:
+    option = "gpt-4"
+    st.session_state['option'] = option
+
+if option == "gpt3.5":
+    modelname = st.secrets["OPENAI_API_MODEL_NAME_35"]
+else:
+    modelname = st.secrets["OPENAI_API_MODEL_NAME"]
+
+
+def get_completion_title(txt, instruction_title, option):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            engine=modelname,
             messages=[
                 {"role": "system", "content": "あなたは特許文章を作成する人です。"},
                 {"role": "user", "content": instruction_title + txt},
@@ -16,13 +28,13 @@ def get_completion_title(txt, instruction_title):
         )
         return response.choices[0].message.content
     except Exception as e:
-        return "error!" + st.write(e)
+        return e
 
 
-def get_completion_abst(txt, title, instruction_title, instruction_abst, abst):
+def get_completion_abst(txt, title, instruction_title, instruction_abst, abst, option):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            engine=modelname,
             messages=[
                 {"role": "system", "content": "あなたは特許文章を作成する人です。"},
                 {"role": "user", "content": instruction_title + txt},
@@ -32,13 +44,13 @@ def get_completion_abst(txt, title, instruction_title, instruction_abst, abst):
         )
         return response.choices[0].message.content
     except Exception as e:
-        return "error!" + st.write(e)
+        return e
 
 
-def get_completion_claims(txt, title, abst, instruction_title, instruction_abst, instruction_claims, claims):
+def get_completion_claims(txt, title, abst, instruction_title, instruction_abst, instruction_claims, claims, option):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            engine=modelname,
             messages=[
                 {"role": "system", "content": "あなたは特許文章を作成する人です。"},
                 {"role": "user", "content": instruction_title + txt},
@@ -50,13 +62,13 @@ def get_completion_claims(txt, title, abst, instruction_title, instruction_abst,
         )
         return response.choices[0].message.content
     except Exception as e:
-        return "error!" + st.write(e)
+        return e
 
 
-def get_completion_desc(txt, title, abst, instruction_title, instruction_abst, instruction_claims, claims, instruction_desc):
+def get_completion_desc(txt, title, abst, instruction_title, instruction_abst, instruction_claims, claims, instruction_desc, option):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            engine=modelname,
             messages=[
                 {"role": "system", "content": "あなたは特許文章を作成する人です。"},
                 {"role": "user", "content": instruction_title + txt},
@@ -71,4 +83,4 @@ def get_completion_desc(txt, title, abst, instruction_title, instruction_abst, i
         )
         return response.choices[0].message.content
     except Exception as e:
-        return "error!" + st.write(e)
+        return e

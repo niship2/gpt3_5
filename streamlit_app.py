@@ -1,10 +1,5 @@
 import streamlit as st
 
-st.set_page_config(
-    page_title="Hello",
-    page_icon="👋",
-)
-
 
 def check_password():
     """Returns `True` if the user had the correct password."""
