@@ -62,7 +62,7 @@ if check_password():
                 '文章生成指示文を入力してください', value="10文字程度で発明の名称を作成してください。", placeholder="特許文章らしいタイトルを１０文字以内で作成してください。")
             if st.button("名称作成！"):
                 title = get_completion_title(
-                    txt, instruction_title=instruction_title, option="gpt-4")
+                    txt, instruction_title=instruction_title)
             else:
                 title = st.session_state['title']
         with title_gen_col:
@@ -78,7 +78,7 @@ if check_password():
                 '文章生成指示文を入力してください', value="特許文章らしい要約として修正してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。", placeholder="特許文章らしい要約を作成してください。【課題】と【解決手段】という見出しを加えてください。であるという語尾で作成して下さい。")
             if st.button("要約修正！"):
                 abst = get_completion_abst(
-                    txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst, abst=abst, option="gpt-4")
+                    txt, title=title, instruction_title=instruction_title, instruction_abst=instruction_abst, abst=abst)
             else:
                 abst = st.session_state['abst']
         with abst_gen_col:
@@ -95,7 +95,7 @@ if check_password():
 
             if st.button("請求項修正！"):
                 claims = get_completion_claims(
-                    txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims, claims=claims, option="gpt-4")
+                    txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst, instruction_claims=instruction_claims, claims=claims)
             else:
                 claims = st.session_state['claims']
 
@@ -112,7 +112,7 @@ if check_password():
                 '文章生成指示文を入力してください', value="特許文章らしい明細書の文章として修正してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。", placeholder="特許文章らしい明細書の文章を作成してください。【発明の詳細な説明】、【技術分野】、【背景技術】、【先行技術文献】、【発明が解決しようとする課題】、【課題を解決するための手段】、【図面の簡単な説明】、【発明を実施するための形態】という見出しをこの順番で加えてください。【背景技術】の部分では先行技術の欠点を説明してください。【先行技術文献】では先行技術文献の番号を入れてください。各見出しで改行して下さい。文章は「である。」「であった。」などの語尾で作成して下さい。")
             if st.button("明細書修正！"):
                 desc = get_completion_desc(txt, title=title, abst=abst, instruction_title=instruction_title, instruction_abst=instruction_abst,
-                                           instruction_claims=instruction_claims, claims=claims, instruction_desc=instruction_desc, option="gpt-4")
+                                           instruction_claims=instruction_claims, claims=claims, instruction_desc=instruction_desc)
             else:
                 desc = st.session_state['desc']
         with desc_gen_col:

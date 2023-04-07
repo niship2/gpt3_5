@@ -17,7 +17,7 @@ else:
     modelname = st.secrets["OPENAI_API_MODEL_NAME"]
 
 
-def get_completion_title(txt, instruction_title, option):
+def get_completion_title(txt, instruction_title):
     try:
         response = openai.ChatCompletion.create(
             engine=modelname,
@@ -31,7 +31,7 @@ def get_completion_title(txt, instruction_title, option):
         return e
 
 
-def get_completion_abst(txt, title, instruction_title, instruction_abst, abst, option):
+def get_completion_abst(txt, title, instruction_title, instruction_abst, abst):
     try:
         response = openai.ChatCompletion.create(
             engine=modelname,
@@ -47,7 +47,7 @@ def get_completion_abst(txt, title, instruction_title, instruction_abst, abst, o
         return e
 
 
-def get_completion_claims(txt, title, abst, instruction_title, instruction_abst, instruction_claims, claims, option):
+def get_completion_claims(txt, title, abst, instruction_title, instruction_abst, instruction_claims, claims):
     try:
         response = openai.ChatCompletion.create(
             engine=modelname,
@@ -65,7 +65,7 @@ def get_completion_claims(txt, title, abst, instruction_title, instruction_abst,
         return e
 
 
-def get_completion_desc(txt, title, abst, instruction_title, instruction_abst, instruction_claims, claims, instruction_desc, option):
+def get_completion_desc(txt, title, abst, instruction_title, instruction_abst, instruction_claims, claims, instruction_desc):
     try:
         response = openai.ChatCompletion.create(
             engine=modelname,
