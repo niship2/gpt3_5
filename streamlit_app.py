@@ -33,4 +33,4 @@ def check_password():
 # st.sidebar.write("パスワードはpasswordです")
 # if check_password():
 if True:
-    st.write("# LLM会話")
+    st.write("# 「LLM議論」を押してください")
