@@ -10,3 +10,4 @@ langchain==0.0.286
 duckduckgo-search
 arxiv
 wikipedia
+google-api-python-client

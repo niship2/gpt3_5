@@ -6,6 +6,8 @@ import openai
 import os
 from langchain.chat_models import AzureChatOpenAI
 from langchain.llms import AzureOpenAI
+from langchain.chat_models import ChatVertexAI
+
 
 from typing import List, Dict, Callable
 from langchain.chains import ConversationChain
@@ -25,12 +27,12 @@ from langchain.agents import initialize_agent
 from langchain.agents import AgentType
 from langchain.agents import load_tools
 from agentclass import DialogueAgent, DialogueAgentWithTools, DialogueSimulator
+from translate import translate_text
 
 # from callbackhandler import SimpleStreamlitCallbackHandler
 
 # streamling用のもの
 # handler = SimpleStreamlitCallbackHandler()
-
 
 BASE_URL = st.secrets["OPENAI_API_BASE"]
 API_KEY = st.secrets["API_KEY"]
@@ -39,16 +41,28 @@ API_KEY = st.secrets["API_KEY"]
 with st.sidebar.form("パラメータ指定", clear_on_submit=False):
     topic = st.text_input(
         "議論内容：",
-        "Issues for acquisition of Climeworks",
+        "ヴィーガンレザーについて",
         key="placeholder",
     )
     roles = st.multiselect(
-        "議論の立場選択",
-        ["ファイナンシャル・アドバイザー", "研究者", "弁護士", "会計士", "企業アナリスト", "投資家"],
-        ["企業アナリスト", "投資家"],
+        "議論の役割選択",
+        [
+            "エンジニア",
+            "デザイナー",
+            "研究者",
+            "弁護士",
+            "ファイナンシャル・アドバイザー",
+            "会計士",
+            "企業アナリスト",
+            "投資家",
+            "皮肉屋",
+            "悲観論者",
+            "楽観論者",
+        ],
+        ["エンジニア", "投資家", "悲観論者"],
     )
     # model選択
-    option = st.selectbox("モデル選択", ("gpt-3.5", "gpt-4"))
+    option = st.selectbox("モデル選択", ("gpt-3.5", "gpt-4", "PaLM2"))
     if option == "gpt3.5":
         DEPLOYMENT_NAME = st.secrets["OPENAI_API_MODEL_NAME_35"]
     else:
@@ -89,14 +103,12 @@ def generate_agent_description(name):
 
 # @title generate_system_message(name, description, tools)
 def generate_system_message(name, description, tools):
+    # Your goal is to explain your conversation partner of your point of view.
     return f"""{conversation_description}
 
 Your name is {name}.
-
 Your description is as follows: {description}
-
-Your goal is to explain your conversation partner of your point of view.
-
+Your goal is to persuade your conversation partner of your point of view.
 DO look up information with your tool.
 DO cite your sources.
 
@@ -108,6 +120,7 @@ Do not add anything else.
 Stop speaking the moment you finish speaking from your perspective.
 
 Speak in English. 
+Show your sources and url in English.
 """
 
 
@@ -123,7 +136,7 @@ if True:
     names = {}
 
     for role in roles:
-        names[role] = ["arxiv", "ddg-search", "wikipedia"]
+        names[role] = ["wikipedia", "arxiv", "ddg-search", "google-search"]
 
     # names = {
     #    "lawyer": ["human", "ddg-search", "wikipedia"],
@@ -132,7 +145,7 @@ if True:
     #    "researcher": ["human", "arxiv", "ddg-search", "wikipedia"],
     # }
 
-    word_limit = 100  # word limit for task brainstorming
+    word_limit = 50  # word limit for task brainstorming
 
     if submitted:
         # @title generate_agent_description(name)
@@ -195,7 +208,7 @@ if True:
 
         # @title 実行
 
-        max_iters = len(roles)
+        max_iters = min(2 * len(roles), 8)
         n = 0
 
         simulator = DialogueSimulator(
@@ -209,6 +222,13 @@ if True:
         while n < max_iters:
             name, message = simulator.step()
             with st.chat_message(name):
-                st.write("(" + name + "):" + "  " + message)
+                st.write(
+                    "("
+                    + name
+                    + "):"
+                    + "  "
+                    # + message
+                    + translate_text(message)
+                )
 
             n += 1

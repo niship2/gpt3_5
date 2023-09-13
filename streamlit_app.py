@@ -30,7 +30,7 @@ def check_password():
         return True
 
 
-st.sidebar.write("パスワードはpasswordです")
+# st.sidebar.write("パスワードはpasswordです")
 # if check_password():
 if True:
     st.write("# LLM会話")
