@@ -62,11 +62,11 @@ with st.sidebar.form("パラメータ指定", clear_on_submit=False):
         ["エンジニア", "投資家", "悲観論者"],
     )
     # model選択
-    option = st.selectbox("モデル選択", ("gpt-3.5", "gpt-4", "PaLM2"))
-    if option == "gpt3.5":
-        DEPLOYMENT_NAME = st.secrets["OPENAI_API_MODEL_NAME_35"]
-    else:
-        DEPLOYMENT_NAME = st.secrets["OPENAI_API_MODEL_NAME"]
+    # option = st.selectbox("モデル選択", ("gpt-3.5", "gpt-4", "PaLM2"))
+    # if option == "gpt3.5":
+    DEPLOYMENT_NAME = st.secrets["OPENAI_API_MODEL_NAME_35"]
+    # else:
+    #    DEPLOYMENT_NAME = st.secrets["OPENAI_API_MODEL_NAME"]
 
     submitted = st.form_submit_button("開始！")
 
